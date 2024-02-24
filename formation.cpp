@@ -53,6 +53,8 @@ int get(int i, int j, int dis){
 int val[4][2002][2002];
 int sum[4][4004][4004];
 int pref[4][4004][4004];
+int cnt[4][4004][4004];
+int precnt[4004][4004];
 void full(){
      fo(i, 1, n){
           fo(j, 1, m){
@@ -64,6 +66,7 @@ void full(){
                fo(id, 0, 3){
                     sum[id][i][j] = sum[id][i - 1][j] + sum[id][i][j - 1] - sum[id][i - 1][j - 1] + val[id][i][j];
                }
+               precnt[i][j] = precnt[i - 1][j] + precnt[i][j - 1] - precnt[i - 1][j - 1] + a[i][j];
           }
      }
      fo(i, 1, n + m){
@@ -77,12 +80,18 @@ void full(){
                if(i >= 2) pref[0][i][j] -= pref[0][i - 2][j + 1];
                pref[1][i][j] = val[1][i][j] + pref[1][i][j - 1] + pref[1][i - 1][j - 1];
                if(j >= 2) pref[1][i][j] -= pref[1][i - 1][j - 2];
+               cnt[0][i][j] = (val[0][i][j] > 0) + cnt[0][i - 1][j] + cnt[0][i - 1][j + 1];
+               if(i >= 2) cnt[0][i][j] -= cnt[0][i - 2][j + 1];
+               cnt[1][i][j] = (val[1][i][j] > 0) + cnt[1][i][j - 1] + cnt[1][i - 1][j - 1];
+               if(j >= 2) cnt[1][i][j] -= cnt[1][i - 1][j - 2];
           }
      }
      foi(i, n + m, 1){
           foi(j, n + m, 1){
                pref[2][i][j] = val[2][i][j] + pref[2][i + 1][j - 1] + pref[2][i + 1][j] - pref[2][i + 2][j - 1];
                pref[3][i][j] = val[3][i][j] + pref[3][i][j + 1] + pref[3][i + 1][j + 1] - pref[3][i + 1][j + 2];
+               cnt[2][i][j] = (val[2][i][j] > 0) + cnt[2][i + 1][j - 1] + cnt[2][i + 1][j] - cnt[2][i + 2][j - 1];
+               cnt[3][i][j] = (val[3][i][j] > 0) + cnt[3][i][j + 1] + cnt[3][i + 1][j + 1] - cnt[3][i + 1][j + 2];
           }
      }
      fo(i, 2, 2){
@@ -99,12 +108,14 @@ void full(){
                // x - i + y - j <= pre - 1
                // x + y <= pre + i + j - 1
                ans += pref[0][i + 1 + pre - 1][j] - pref[0][i + 1 - 1][j + pre] - get(1, j, i + 1 - 1, j + pre - 1, sum[0]);
+               ans -= (i + j) * (cnt[0][i + 1 + pre - 1][j] - cnt[0][i + 1 - 1][j + pre] - get(1, j, i + 1 - 1, j + pre - 1, precnt));
                cout << ans, el
                // i - x + y - j <= pre - 1
                // y - x <= pre - i + j - 1
                ans += pref[1][i][j + 1 + pre - 1] - pref[1][max(0, i - (pre - 1) - 1)][j] - get(max(0, i - (pre - 1) - 1) + 1,  m, i, j, sum[1]);
+               ans -= (i + j) * (cnt[1][i][j + 1 + pre - 1] - cnt[1][max(0, i - (pre - 1) - 1)][j] - get(max(0, i - (pre - 1) - 1) + 1,  m, i, j, precnt));
                // i - x + j - y <= pre - 1
-               ans += pref[2][]
+//               ans += pref[2][]
           }
      }
 }

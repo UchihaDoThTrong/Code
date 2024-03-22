@@ -59,9 +59,18 @@ void sol(){
                fo(j, 0, n - 1){
                     dp[i][mask] += dp[i - 1][mask ^ (1 << j)];
                }
-               dp[i][mask] /= k;
+               dp[i][mask] /= i;
           }
      }
+     int ans = 0x3f3f3f3f;
+     fo(mask, 0, (1 << n) - 1){
+          int sum = 0;
+          fo(i, 0, n){
+               sum += dp[i][mask] * min(i, n - i);
+          }
+          ans = min(ans, sum);
+     }
+     cout << ans;
 }
 int main(){
      ios_base::sync_with_stdio(false);
@@ -70,4 +79,3 @@ int main(){
      sol();
      return 0;
 }
-

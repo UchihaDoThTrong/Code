@@ -50,9 +50,9 @@ void sol(){
      fo(i, 0, m) dp[i][0] = 0;
      int ans = 0;
      fo(i, 1, m){
-          fo(j, 1, n){
+          fo(j, 1, m){
                dp[i][j] = dp[i - 1][j];
-               if(dp[i - 1][j - 1] <= m){
+               if(dp[i - 1][j - 1] <= n){
                     int id = lower_bound(adj[a[i] + 1000000].begin(), adj[a[i] + 1000000].end(), dp[i - 1][j - 1]) - adj[a[i] + 1000000].begin();
                     if(id != (int)adj[a[i] + 1000000].size()){
                          dp[i][j] = min(dp[i][j], adj[a[i] + 1000000][id]);
@@ -62,7 +62,7 @@ void sol(){
                     }
                }
 //               cout << dp[i][j] << ' ';
-               if(i == n && dp[i][j] <= m) ans = j;
+               if(i == m && dp[i][j] <= n) ans = j;
           }
 //          el
      }
